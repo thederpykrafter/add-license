@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# update all git repos (https://github.com/thederpykrafter/get-repos)
+~/Dev/sh/get-repos/get-repos.sh
+
+# get all folders in ~/Dev
+dirs1=$(fd . ~/Dev --maxdepth 2 --type d)
+
+for dir in $dirs1; do
+  # check if ~/Dev/$dir contains files
+  if [[ ! $(fd . $dir --maxdepth 1 --type f) == "" ]]; then
+    # check for existing LICENSE file
+    if [ ! -f $dir/LICENSE ]; then
+      cp ~/Dev/sh/add-license/LICENSE $dir
+
+      # update git
+      cd $dir
+      git add .
+      git commit -m "add LICENSE"
+      git push
+    fi
+  fi
+done
