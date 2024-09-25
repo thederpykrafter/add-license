@@ -21,3 +21,5 @@ for dir in $dirs1; do
     fi
   fi
 done
+
+~/Dev/sh/get-repos/get-repos.sh
