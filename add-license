@@ -8,9 +8,10 @@ dirs1=$(fd . ~/Dev --maxdepth 2 --type d)
 
 for dir in $dirs1; do
   # check if ~/Dev/$dir contains files
-  if [[ ! $(fd . $dir --maxdepth 1 --type f) == "" ]]; then
+  if [[ $(fd . $dir --maxdepth 1 --type f) != "" ]]; then
     # check for existing LICENSE file
-    if [ ! -f $dir/LICENSE ]; then
+    if [ ! -f $(echo $dir"LICENSE") ]; then
+      echo -e "\e[93mAdding LICENSE to\n\e[94m$dir\e[m"
       cp ~/Dev/sh/add-license/LICENSE $dir
 
       # update git
@@ -18,8 +19,8 @@ for dir in $dirs1; do
       git add .
       git commit -m "add LICENSE"
       git push
+    elif [[ $(cat $(echo $dir"LICENSE")) == "" ]]; then
+      echo $dir"LICENSE" is blank
     fi
   fi
 done
-
-~/Dev/sh/get-repos/get-repos.sh
